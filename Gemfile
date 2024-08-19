@@ -1,12 +1,14 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
+source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.2.5"
 
 gem "rails",           "7.0.4.3"
+gem "erb_lint"
 gem "sassc-rails",     "2.1.2"
+gem "importmap-rails", '1.1.5'
 gem "sprockets-rails", "3.4.2"
-gem "importmap-rails", "1.1.5"
 gem "turbo-rails",     "1.4.0"
 gem "stimulus-rails",  "1.2.1"
 gem "jbuilder",        "2.11.5"
