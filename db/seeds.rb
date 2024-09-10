@@ -23,3 +23,8 @@ User.create!(name: 'Example User',
                activated: true,
                activated_at: Time.zone.now)
 end
+user = User.order(:created_at).take(6)
+50.times do
+  dummy_content = Faker::Lorem.sentence(word_count: 5)
+  user.each { |u| u.microposts.create!(content: dummy_content) }
+end
