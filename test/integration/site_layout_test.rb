@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class SiteLayoutTest < ActionDispatch::IntegrationTest
+  include ApplicationHelper
   def setup
     @user = users(:michael)
   end
@@ -18,12 +19,20 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_select 'title', full_title('Sign up')
   end
 
-  test 'all links only ligged in users' do
+  test 'all links only logged in users' do
     log_in_as(@user)
     get root_path
     assert_select 'a[href=?]', users_path
     assert_select 'a[href=?]', user_path(@user)
     assert_select 'a[href=?]', edit_user_path(@user)
     assert_select 'a[href=?]', logout_path
+  end
+
+  test 'get right number of following and followers' do
+    log_in_as(@user)
+    get root_path
+    assert_template 'static_pages/home'
+    assert_match @user.followers.count.to_s, response.body
+    assert_match @user.following.count.to_s, response.body
   end
 end
