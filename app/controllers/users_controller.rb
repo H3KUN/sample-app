@@ -14,6 +14,9 @@ class UsersController < ApplicationController # rubocop:disable Style/Documentat
     redirect_to root_url and return unless @user.activated?
 
     @microposts = @user.microposts.paginate(page: params[:page])
+    if logged_in?
+      @micropost = current_user.microposts.build
+    end
   end
 
   def new
