@@ -1,6 +1,13 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
     <%= link_to "sample app", root_path, id: "logo" %>
+    <div class="search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <%= form_with url: search_path, local: true, method: :get do |f| %>
+        <%= f.text_field :word, placeholder: 'What you want to know?' %>
+        <% f.submit %>
+      <% end %>
+    </div>
     <nav>
       <div class="navbar-header">
         <button id="hamburger" type="button" class="navbar-toggle collapsed">

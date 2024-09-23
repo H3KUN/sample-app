@@ -305,3 +305,27 @@ span.image {
     border: 0;
   }
 }
+
+.search {
+  float: left;
+  position: relative;
+  i {
+    color: black;
+    position: absolute;
+    left: 10px;
+    bottom: 5px;
+  }
+  input {
+    border: 1px solid #bbb;
+    border-radius: 12px;
+    margin: 13px 5px;
+    padding-left: 22px;
+    margin-bottom: 0;
+    width: 200px;
+    outline: none;
+    background-color: #bbb;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
