@@ -15,6 +15,7 @@ class User < ApplicationRecord
                     uniqueness: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 8 }, allow_nil: true
+  composed_of :reply_name, mapping: [ %w(id user_id), %w(name user_name) ]
 
   # Return Hash value of string
   class << self
@@ -72,7 +73,7 @@ class User < ApplicationRecord
 
   def feed
     part_of_feed = 'relationships.follower_id = :id or microposts.user_id = :id'
-    Micropost.left_outer_joins(user: :followers).where(part_of_feed, { id: id }).distinct.includes(:user, image_attachment: :blob)
+    Micropost.left_outer_joins(user: :followers).where(part_of_feed, { id: id }).or(Micropost.including_replies(id)).distinct.includes(:user, image_attachment: :blob)
   end
 
   def follow(other_user)

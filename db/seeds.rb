@@ -35,3 +35,10 @@ following = users[2..50]
 followers = users[3..40]
 following.each { |followed| user.follow(followed) }
 followers.each { |follower| follower.follow(user) }
+
+to_user    = users.first
+from_users = users[2..50]
+from_users.each do |from_user|
+  content = to_user.reply_name.to_s + " " + Faker::Lorem.sentence(5)
+  from_user.microposts.create!(content: content)
+end

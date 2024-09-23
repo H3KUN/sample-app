@@ -31,6 +31,6 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user.reload
     assert_equal test_name, @user.name
     assert_equal test_email, @user.email
-    assert_equal session[:forwarding_url], nil
+    assert_nil session[:forwarding_url]
   end
 end

@@ -97,5 +97,17 @@ class UserTest < ActiveSupport::TestCase
     archer.microposts.each do |post_unfollowed|
       assert_not michael.feed.include?(post_unfollowed)
     end
+    # リプライの確認
+    malory  = users(:malory)
+    user_1  = users(:user_1)
+    reply   = microposts(:reply)
+    # 送信ユーザー
+    assert michael.feed.include?(reply)
+    # 宛先ユーザー
+    assert malory.feed.include?(reply)
+    # 送信ユーザーのフォロワー
+    assert lana.feed.include?(reply)
+    # 送信ユーザーのフォロワーではない
+    assert_not user_1.feed.include?(reply)
   end
 end

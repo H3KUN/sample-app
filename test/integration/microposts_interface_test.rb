@@ -59,6 +59,45 @@ class MicropostSidebarTest < MicropostsInterface
     get root_path
     assert_match "1 micropost", response.body
   end
+  test "reply interface" do
+    other_user = users(:archer)
+    unactivated_user = users(:unactivated)
+    log_in_as(@user)
+    get root_path
+    # 存在しないユーザー
+    assert_no_difference 'Micropost.count' do
+      post microposts_path, params: { micropost:
+                                        { content: "@0-invalid-user content" } }
+    end
+    assert_select 'div#error_explanation'
+    # 有効化されていないユーザー
+    assert_no_difference 'Micropost.count' do
+      post microposts_path, params: { micropost:
+                                        { content: "#{unactivated_user.reply_name.to_s} content" } }
+    end
+    assert_select 'div#error_explanation'
+    # 宛先ユーザーとcontentのリプライ名が一致しない
+    assert_no_difference 'Micropost.count' do
+      post microposts_path, params: { micropost:
+                                        { content: "@#{other_user.id}-wrong-name content" } }
+    end
+    assert_select 'div#error_explanation'
+    # 自分自身へのリプライ
+    assert_difference 'Micropost.count', 1 do
+      post microposts_path, params: { micropost:
+                                        { content: "#{@user.reply_name.to_s} content" } }
+    end
+    # 有効なリプライ
+    assert_difference 'Micropost.count', 1 do
+      post microposts_path, params: { micropost:
+                                        { content: "#{other_user.reply_name.to_s} content" } }
+    end
+    assert assigns(:micropost).reply?
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_match "@#{other_user.name}", response.body
+  end
+
 end
 
 class ImageUploadTest < MicropostsInterface
